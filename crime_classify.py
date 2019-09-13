@@ -26,7 +26,7 @@ class CrimeClassify(object):
     def build_crime_dict(self, crimefile):
         label_dict = {}
         i = 0
-        for line in open(crimefile):
+        for line in open(crimefile, 'r', encoding='UTF-8'):
             crime = line.strip()
             if not crime:
                 continue
@@ -38,7 +38,7 @@ class CrimeClassify(object):
     def load_embedding(self, embedding_path):
         embedding_dict = {}
         count = 0
-        for line in open(embedding_path):
+        for line in open(embedding_path, 'r', encoding='UTF-8'):
             line = line.strip().split(' ')
             if len(line) < 300:
                 continue

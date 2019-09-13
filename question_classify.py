@@ -34,7 +34,6 @@ class QuestionClassify(object):
         self.embdding_dict = self.load_embedding(self.embedding_path)
         self.max_length = 60
         self.embedding_size = 300
-        self.lstm_modelpath = 'model/lstm_question_classify.h5'
         self.cnn_modelpath = 'model/cnn_question_classify.h5'
         return
 
@@ -42,7 +41,7 @@ class QuestionClassify(object):
     def load_embedding(self, embedding_path):
         embedding_dict = {}
         count = 0
-        for line in open(embedding_path):
+        for line in open(embedding_path, 'r', encoding='UTF-8'):
             line = line.strip().split(' ')
             if len(line) < 300:
                 continue
@@ -93,45 +92,6 @@ class QuestionClassify(object):
                 embedding_matrix[indx] = context_vector
 
         return embedding_matrix
-
-    '''对数据进行onehot映射操作'''
-
-    def label_onehot(self, label):
-        one_hot = [0] * len(self.label_dict)
-        one_hot[int(label)] = 1
-        return one_hot
-
-
-    '''构造CNN网络模型'''
-    def build_cnn_model(self):
-        model = Sequential()
-        model.add(Conv1D(64, 3, activation='relu', input_shape=(self.max_length, self.embedding_size)))
-        model.add(Conv1D(64, 3, activation='relu'))
-        model.add(MaxPooling1D(3))
-        model.add(Conv1D(128, 3, activation='relu'))
-        model.add(Conv1D(128, 3, activation='relu'))
-        model.add(GlobalAveragePooling1D())
-        model.add(Dropout(0.5))
-        model.add(Dense(13, activation='softmax'))
-        model.compile(loss='categorical_crossentropy',
-                      optimizer='rmsprop',
-                      metrics=['accuracy'])
-        model.summary()
-        return model
-
-    '''构造LSTM网络'''
-    def build_lstm_model(self):
-        model = Sequential()
-        model.add(LSTM(32, return_sequences=True, input_shape=(
-        self.max_length, self.embedding_size)))  # returns a sequence of vectors of dimension 32
-        model.add(LSTM(32, return_sequences=True))  # returns a sequence of vectors of dimension 32
-        model.add(LSTM(32))  # return a single vector of dimension 32
-        model.add(Dense(13, activation='softmax'))
-        model.compile(loss='categorical_crossentropy',
-                      optimizer='rmsprop',
-                      metrics=['accuracy'])
-
-        return model
 
     '''问题分类'''
     def predict(self, sent):

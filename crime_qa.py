@@ -14,7 +14,7 @@ import jieba.posseg as pseg
 class CrimeQA:
     def __init__(self):
         self._index = "crime_data"
-        self.es = Elasticsearch([{"host": "127.0.0.1", "port": 9200}])
+        self.es = Elasticsearch([{"host": "10.18.15.106", "port": 9200}])
         self.doc_type = "crime"
         cur = '/'.join(os.path.abspath(__file__).split('/')[:-1])
         self.embedding_path = os.path.join(cur, 'embedding/word_vec_300.bin')
@@ -32,7 +32,7 @@ class CrimeQA:
                 }
             }
         }
-        searched = self.es.search(index=self._index, doc_type=self.doc_type, body=query_body, size=20)
+        searched = self.es.search(index="crime_data", doc_type="crime", body=query_body, size=20)
         # 输出查询到的结果
         return searched["hits"]["hits"]
 
@@ -53,7 +53,7 @@ class CrimeQA:
     def load_embedding(self, embedding_path):
         embedding_dict = {}
         count = 0
-        for line in open(embedding_path):
+        for line in open(embedding_path, 'r', encoding='UTF-8'):
             line = line.strip().split(' ')
             if len(line) < 300:
                 continue

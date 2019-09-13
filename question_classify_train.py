@@ -29,7 +29,7 @@ class QuestionClassify(object):
             }
         cur = '/'.join(os.path.abspath(__file__).split('/')[:-1])
         self.train_file = os.path.join(cur, 'question_train.txt')
-        self.embedding_path = os.path.join(cur, 'word_vec_300.bin')
+        self.embedding_path = os.path.join(cur, 'embedding/word_vec_300.bin')
         self.embdding_dict = self.load_embedding(self.embedding_path)
         self.max_length = 60
         self.embedding_size = 300
@@ -41,7 +41,7 @@ class QuestionClassify(object):
     def load_embedding(self, embedding_path):
         embedding_dict = {}
         count = 0
-        for line in open(embedding_path):
+        for line in open(embedding_path, 'r', encoding='UTF-8'):
             line = line.strip().split(' ')
             if len(line) < 300:
                 continue
@@ -103,7 +103,7 @@ class QuestionClassify(object):
         count = 0
         for line in open(self.train_file):
 
-            line = line.strip().strip().split('\t')
+            line = line.strip().split('\t')
             if len(line) < 2:
                 continue
             count += 1

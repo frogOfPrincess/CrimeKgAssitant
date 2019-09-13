@@ -1,0 +1,2 @@
+embedding文件夹中应该包含有一个数据文件word_vec_300.bin，可在以下地址下载
+https://pan.baidu.com/s/17w4pl7wCt45fmcOorqUgAA 密码:2utz

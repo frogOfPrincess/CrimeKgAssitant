@@ -15,10 +15,10 @@ import pymongo
 class ProcessIntoES:
     def __init__(self):
         self._index = "crime_data"
-        self.es = Elasticsearch([{"host": "127.0.0.1", "port": 9200}])
+        self.es = Elasticsearch([{"host": "10.18.15.106", "port": 9200}])
         self.doc_type = "crime"
         cur = '/'.join(os.path.abspath(__file__).split('/')[:-1])
-        self.music_file = os.path.join(cur, 'qa_corpus.json')
+        self.music_file = os.path.join(cur, 'data/qa_corpus.json')
 
     '''创建ES索引，确定分词类型'''
     def create_mapping(self):
@@ -65,7 +65,7 @@ def init_ES():
     action_list = []
     BULK_COUNT = 1000  # 每BULK_COUNT个句子一起插入到ES中
 
-    for line in open(pie.music_file):
+    for line in open(pie.music_file, 'r', encoding='UTF-8'):
         if not line:
             continue
         item = json.loads(line)
@@ -92,7 +92,7 @@ def init_ES():
 
 if __name__ == "__main__":
     # 将数据库插入到elasticsearch当中
-    # init_ES()
+    init_ES()
     # 按照标题进行查询
     question = '我老公要起诉离婚 我不想离婚怎么办'
 
